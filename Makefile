@@ -91,7 +91,7 @@ SRC_PATH := src
 DBG_PATH := debug
 
 # compile macros
-TARGET_NAME := rgquake
+TARGET_NAME := rgqx
 TARGET := $(BIN_PATH)/$(TARGET_NAME)
 TARGET_DEBUG := $(DBG_PATH)/$(TARGET_NAME)
 MAIN_SRC := # FILL: src file contains `main()`

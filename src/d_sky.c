@@ -56,6 +56,71 @@ void D_Sky_uv_To_st (int u, int v, fixed16_t *s, fixed16_t *t)
 	*t = (int)((temp + 6*(SKYSIZE/2-1)*end[1]) * 0x10000);
 }
 
+// for gradient sky
+float D_Sky_uv_To_color (int u, int v, int basecolor)
+{
+	float wu, wv;
+	vec3_t end;
+
+	wu = 8192.0 * (float)(u-((int)vid.width>>1)) / (float)r_refdef.vrect.width;
+	wv = 8192.0 * (float)(((int)vid.height>>1)-v) / (float)r_refdef.vrect.width;
+
+	// end[0] = 4096*vpn[0] + wu*vright[0] + wv*vup[0];
+	// end[1] = 4096*vpn[1] + wu*vright[1] + wv*vup[1];
+	end[2] = 4096*vpn[2] + wu*vright[2] + wv*vup[2];
+	// VectorNormalize (end);
+	float add = fabs(end[2]) / 512;
+	if (add >= 7) add = 7;
+
+	return basecolor - add;
+}
+
+void D_DrawSkyScans8_gradient (espan_t *pspan)
+{
+	int				count, spancount, u, v;
+	unsigned char	*pdest;
+	fixed16_t		s, t, snext, tnext, sstep, tstep;
+	int				spancountminus1;
+	float fcol;
+	int col;
+	int dither;
+
+	sstep = 0;	// keep compiler happy
+	tstep = 0;	// ditto
+
+	do
+	{
+		pdest = (unsigned char *)((byte *)d_viewbuffer +
+				(screenwidth * pspan->v) + pspan->u);
+
+		count = pspan->count;
+
+	// calculate the initial s & t
+		u = pspan->u;
+		v = pspan->v;
+		// D_Sky_uv_To_st (u, v, &s, &t);
+
+		do
+		{
+			fcol = D_Sky_uv_To_color(u, v, 47);
+			col = (int)fcol;
+			dither = (fcol - col) > 0.5;
+			spancount = count;
+			if (spancount > 3)
+				spancount = 3;
+			count -= spancount;
+			// u += spancount;
+			do
+			{
+				*pdest++ = col + dither*((u+v)%2);
+				spancount--;
+				u++;
+			} while (spancount > 0);
+		} while (count > 0);
+
+	} while ((pspan = pspan->pnext) != NULL);
+}
+
 
 /*
 =================
