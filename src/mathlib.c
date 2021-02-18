@@ -398,7 +398,17 @@ float VectorNormalize (vec3_t v)
 	}
 		
 	return length;
+}
 
+void FastNormalize (vec3_t v)
+{
+	float	ilength;
+
+	ilength = 1/sqrtf(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+
+	v[0] *= ilength;
+	v[1] *= ilength;
+	v[2] *= ilength;
 }
 
 void VectorInverse (vec3_t v)
