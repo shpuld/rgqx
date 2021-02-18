@@ -55,20 +55,42 @@ typedef struct
 // Modified for rg350
 keyname_t keynames[] =
 {
+	#ifdef HANDHELD
 	{"L1", K_TAB},
 	{"START", K_ENTER},
 	{"SELECT", K_ESCAPE},
 	{"X", K_SPACE},
 	{"R1", K_BACKSPACE},
+	{"B", K_ALT},
+	{"A", K_CTRL},
+	{"Y", K_SHIFT},
+	{"R2", K_PGDN},
+	{"L2", K_PGUP},
+	{"POWER", K_HOME},
+	{"L3", '/'},
+	{"R3", '.'},
+	#else
+	{"TAB", K_TAB},
+	{"ENTER", K_ENTER},
+	{"ESCAPE", K_ESCAPE},
+	{"SPACE", K_SPACE},
+	{"BACKSPACE", K_BACKSPACE},
+	{"ALT", K_ALT},
+	{"CTRL", K_CTRL},
+	{"SHIFT", K_SHIFT},
+	{"PGDN", K_PGDN},
+	{"PGUP", K_PGUP},
+	{"HOME", K_HOME},
+	#endif
+
+	{"END", K_END},
+	{"INS", K_INS},
+	{"DEL", K_DEL},
+	
 	{"UP", K_UPARROW},
 	{"DOWN", K_DOWNARROW},
 	{"LEFT", K_LEFTARROW},
 	{"RIGHT", K_RIGHTARROW},
-
-	{"B", K_ALT},
-	{"A", K_CTRL},
-	{"Y", K_SHIFT},
-	
 	{"F1", K_F1},
 	{"F2", K_F2},
 	{"F3", K_F3},
@@ -82,12 +104,6 @@ keyname_t keynames[] =
 	{"F11", K_F11},
 	{"F12", K_F12},
 
-	{"INS", K_INS},
-	{"DEL", K_DEL},
-	{"R2", K_PGDN},
-	{"L2", K_PGUP},
-	{"POWER", K_HOME},
-	{"END", K_END},
 
 	{"MOUSE1", K_MOUSE1},
 	{"MOUSE2", K_MOUSE2},
@@ -137,8 +153,6 @@ keyname_t keynames[] =
 	{"MWHEELDOWN", K_MWHEELDOWN},
 
 	{"SEMICOLON", ';'},	// because a raw semicolon seperates commands
-	{"L3", '/'},
-	{"R3", '.'},
 
 	{NULL,0}
 };
@@ -638,8 +652,11 @@ void Key_Event (int key, qboolean down)
 //
 // handle escape specialy, so the user can never unbind it
 //
-	//if (key == K_ESCAPE)
+	#ifdef HANDHELD
 	if (key == RG_START)
+	#else
+	if (key == K_ESCAPE)
+	#endif
 	{
 		if (!down)
 			return;

@@ -937,6 +937,10 @@ void Host_Init (quakeparms_t *parms)
 	host_hunklevel = Hunk_LowMark ();
 
 	host_initialized = true;
+
+	// Make sure screen gets updated to reflect settings
+	Cbuf_Execute();
+	VID_PaletteColormath (host_basepal, v_hue.value, v_saturation.value, v_lightness.value);
 	
 	Sys_Printf ("========Quake Initialized=========\n");	
 }

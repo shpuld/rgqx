@@ -1787,6 +1787,7 @@ void M_AdjustColorSliders (int dir)
 		Cvar_SetValue ("v_hue", v_hue.value);
 		VID_PaletteColormath (host_basepal, v_hue.value, v_saturation.value, v_lightness.value);
 		break;
+
 	case 2: // saturation
 		v_saturation.value += dir * 0.1;
 		if (v_saturation.value < 0) v_saturation.value = 0;

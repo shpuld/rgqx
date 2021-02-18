@@ -115,11 +115,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define K_MWHEELUP		239
 #define K_MWHEELDOWN	240
 
+#ifdef HANDHELD
 #define RG_START K_ENTER
 #define RG_A K_CTRL
 #define RG_B K_ALT
 #define RG_SELECT K_ESCAPE
-
+#else
+#define RG_START K_ALT
+#define RG_B K_CTRL
+#define RG_A K_ENTER
+#define RG_SELECT K_SPACE
+#endif
 
 
 typedef enum {key_game, key_console, key_message, key_menu} keydest_t;
